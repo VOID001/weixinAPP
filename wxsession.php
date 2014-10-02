@@ -4,10 +4,10 @@
 	//			  and access the Session Database then operate 
 	// 			  the session Info with functions given below
 	class VSession{
-		var $userID;
+		private $userID;
 		public function check_session()
 		{
-
+			$SQLQUERY="SELECT * FROM session WHERE UID ='".$this->userID
 		}
 
 		public function set_session()
