@@ -7,7 +7,7 @@
 		private $userID;
 		public function check_session()
 		{
-			$SQLQUERY="SELECT * FROM session WHERE UID ='".$this->userID
+			$SQLQUERY="SELECT * FROM session WHERE UID ='".$this->userID;
 		}
 
 		public function set_session()
