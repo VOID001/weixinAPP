@@ -60,7 +60,7 @@ class Wechatapi
 				<MsgType><![CDATA[%s]]></MsgType>
 				<Content><![CDATA[%s]]></Content>
 				</xml>";             
-			$resultStr=sprintf($textTp, $userObj->myname, $userObj->username,$userObj->timeStamp, $userObj->msgType,$contentObj->textMsg);
+			$resultStr=sprintf($textTp, $userObj->username, $userObj->myname,$userObj->timeStamp, $userObj->msgType,$contentObj->textMsg);
 			break;
 		}
 		return $resultStr;
