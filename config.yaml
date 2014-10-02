@@ -1,0 +1,5 @@
+name: neupweixin
+version: 1
+handle:
+
+- passwdaccess: if( path == "1.neupweixin.sinaapp.com/index.php" ) passwd "admin:neup@204"
