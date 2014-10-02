@@ -5,7 +5,7 @@
 		switch($postObj->msgType)
 		{
 			case "text":
-            	$keyword=trim($postObj->Content);
+            	$keyword=trim($postObj->content);
 				$explodeStr=explode(' ',$keyword);
                 $contentStr=$explodeStr[0];
             	switch($explodeStr[0])
