@@ -48,7 +48,7 @@ class Wechatapi
 		}
 	}
 
-	private function processMsg($userObj,$contentStr)			//Put the contentStrInto A $contentObj
+	private function processMsg($userObj,$contentObj)			//Put the contentStrInto A $contentObj
 	{
 		switch($userObj->msgType)
 		{
@@ -60,7 +60,7 @@ class Wechatapi
 				<MsgType><![CDATA[%s]]></MsgType>
 				<Content><![CDATA[%s]]></Content>
 				</xml>";             
-			$resultStr=sprintf($textTp, $userObj->myname, $userObj->username,$userObj->timeStamp, $userObj->msgType,$contentStr);
+			$resultStr=sprintf($textTp, $userObj->myname, $userObj->username,$userObj->timeStamp, $userObj->msgType,$contentObj->textMsg);
 			break;
 		}
 		return $resultStr;

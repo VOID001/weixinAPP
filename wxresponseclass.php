@@ -77,8 +77,7 @@
 				$contentStr="You have sent A LINK";
 				break;
 
-		}
-        //return $contentStr;
+		} //return $contentStr;
 		return $contObj;
         //return showSESSID($contentStr);
     }
