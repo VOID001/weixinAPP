@@ -14,7 +14,7 @@ class Wechatapi
 			exit;
 		}
 	}
-	public function responseMsg($userObj)
+	public function responseMsg($userObj,$sessObj)
 	{
 		if (!empty($userObj->rawmsg)) 
 		{

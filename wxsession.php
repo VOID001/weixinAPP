@@ -4,7 +4,7 @@
 	//			  and access the Session Database then operate 
 	// 			  the session Info with functions given below
 	class WechatSession{
-		private $userID;
+		public $userID;
         public $sessID;
 		public function check_session()
 		{
@@ -12,17 +12,27 @@
         }   
         public function set_session($sessLayer,$sessNum)
 		{
+			global $connstr;
 			switch($sessLayer)
 			{
 			case 1:
+				$SQLQUERY="UPDATE session SET sess_1=".$sessNum." where UID='".$this->userID."'";
 				break;
 			case 2:
+				$SQLQUERY="UPDATE session SET sess_2=".$sessNum." where UID='".$this->userID."'";
 				break;
 			case 3:
+				$SQLQUERY="UPDATE session SET sess_3=".$sessNum." where UID='".$this->userID."'";
 				break;
 			default:
+				$SQLQUERY="UPDATE session SET sess_1=".$sessNum." where UID='".$this->userID."'";
 				break;
 			}
+				mysql_select_db(SAE_MYSQL_DB,$connstr);
+				mysql_query($SQLQUERY);
+				//echo $SQLQUERY;
+				echo mysql_error();
+				return ;
 		}
 		public function get_session()
 		{
@@ -50,11 +60,12 @@
             }
 		}
 
-		public function __construct($uid="")
+		public function __construct($uid)
 		{
 			$this->userID=$uid;
 		}
-        public function __destroy()
+
+        public function __destruct()
         {
             
         }
