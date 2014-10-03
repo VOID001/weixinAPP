@@ -18,9 +18,8 @@ class Wechatapi
 	{
 		if (!empty($userObj->rawmsg)) 
 		{
-			//$contentStr=receive_wx_msg($userObj);
-			$contentObj = receive_wx_msg($userObj);
-			//$resultStr=$this->processMsg($userObj,$contentStr);
+            $wechatResponseObj=new WechatResponse($userObj,$sessObj);
+			$contentObj = $wechatResponseObj->receive_wx_msg();
 			$resultStr=$this->processMsg($userObj,$contentObj);
 			echo $resultStr;
 		}

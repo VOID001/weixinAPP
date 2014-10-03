@@ -1,6 +1,7 @@
 <?php
 function DB_writeTo($id,$brand,$type)
 {
+	global $connstr;
     //$connstr=mysql_connect($db_host.":".$db_port,$db_user,$db_pass);
     //$connstr = mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS);
     if(!$connstr) return -1;									//连接错误返回-1
@@ -9,14 +10,15 @@ function DB_writeTo($id,$brand,$type)
     $SQLQUERY="INSERT INTO reservation (ID,brand,type,date,ok)"."VALUES("."'".$id."','".$brand."','".$type."','".date("Y-m-d")."','0')";
     $err=mysql_query($SQLQUERY,$connstr);
     echo mysql_error();
-    mysql_close($connstr);
-    if(!$err) return 1;
+    //mysql_close($connstr);						Close the SQL Server when wxmain exit instead of function exit
+    if(!$err) return 1; 
     return 0;
     
 }
 
 function DB_ifExist($id)
 {
+	global $connstr;
     //$connstr = mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS);
     $err=mysql_select_db(SAE_MYSQL_DB,$connstr);
     $SQLQUERY="SELECT * FROM reservation WHERE ID='".$id. "'";
