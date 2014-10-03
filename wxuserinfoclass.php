@@ -7,7 +7,7 @@ class WechatUser{
 	public $msgType;
 	public $content;
 	public $rawmsg;
-	public function __construct($xmlstr)
+	public function __construct($xmlstr="")
 	{
 		$tmpObj = simplexml_load_string($xmlstr,'SimpleXMLElement',LIBXML_NOCDATA);	
 		$this->username = $tmpObj->FromUserName;

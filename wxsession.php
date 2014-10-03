@@ -10,9 +10,19 @@
 		{
 			
         }   
-        function set_session()
+        public function set_session($sessLayer,$sessNum)
 		{
-
+			switch($sessLayer)
+			{
+			case 1:
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+			default:
+				break;
+			}
 		}
 		public function get_session()
 		{
@@ -40,7 +50,7 @@
             }
 		}
 
-		public function __construct($uid)
+		public function __construct($uid="")
 		{
 			$this->userID=$uid;
 		}
