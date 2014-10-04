@@ -46,9 +46,8 @@
             if(!$resStr)
             {
                 //Create a new session;
-                echo nl2br("NODATA\n"."UID=".$this->userID);
                 $SQLQUERY="INSERT INTO session(UID,sess_1,sess_2,sess_3) VALUES ('".$this->userID."',0,0,0)";
-                echo $SQLQUERY;
+				//echo $SQLQUERY;
                 mysql_query($SQLQUERY,$connstr);
                 echo mysql_error();
             }
