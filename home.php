@@ -44,7 +44,7 @@ check_login(); ?>
 		echo '<input type="hidden" name="postchange" value= 1>';
 		while($row=mysql_fetch_array($queryResStr))
 		{
-			echo "<tr><td width=200><b>".$row['ID']."</b></td><td>".$row['brand']."</td><td>";
+			echo "<tr><td width=200><b>".$row['UID']."</b></td><td>".$row['brand']."</td><td>";
 			switch($row['type'])
 			{
 			case 0:
@@ -56,8 +56,11 @@ check_login(); ?>
 			case 2:
 				echo "<font color=purple><b>手机刷机</b></font>";
 				break;
+			case 2:
+				echo "<font color=yellow><b>DataRecovery</b></font>";
+				break;
 			}
-			echo "</td><td>".$row['date'].'</td><td><input type="submit" name=sub value='.$row['ID'].'></td>';
+			echo "</td><td>".$row['date'].'</td><td><input type="submit" name=sub value='.$row['reserhash'].'></td>';
 			echo "</tr>";
 		}
 		echo "</table>";
@@ -73,7 +76,7 @@ check_login(); ?>
 		if(!$err) return -1;
 		else
 		{
-			$SQLQUERY="UPDATE reservation SET ok=1 WHERE ID=\"".$str."\" AND DateDiff(date,\"".date("Y-m-d")."\")<= 7 AND DateDiff(date,\"".date("Y-m-d")."\")>= 0";
+			$SQLQUERY="UPDATE reservation SET ok=1 WHERE reserhash=\"".$str."\" AND DateDiff(date,\"".date("Y-m-d")."\")<= 7 AND DateDiff(date,\"".date("Y-m-d")."\")>= 0";
 			//echo "DEBUG SQLQUERY IN set_ok IS ".$SQLQUERY."<br/>";
 			mysql_query($SQLQUERY);
 			echo mysql_error();

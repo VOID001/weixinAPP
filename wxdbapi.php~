@@ -19,15 +19,21 @@ function DB_write_brand($userObj,$brand)
 function DB_ifExist($id)
 {
 	global $connstr;
+    //$connstr = mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS);
     $err=mysql_select_db(SAE_MYSQL_DB,$connstr);
     $SQLQUERY="SELECT * FROM reservation WHERE UID='".$id. "'";
     $queryResStr=mysql_query($SQLQUERY);
+	echo mysql_error();
     $ok=0;
+    //while($row=mysql_fetch_array($SQLQUERY))//这样写是错误的
     while($row=mysql_fetch_array($queryResStr))
     {
         $delta=abs(date("Y-m-d")-$row['date']);
-		echo (int)$delta;
-		if($row['type']!='9')
+		if($row['type']=='9')
+		{
+			return 0;
+		}
+		else
 		{
 			$ok=1;
 			if($delta>7) return 0; 
@@ -47,12 +53,11 @@ function DB_write_type($id,$type)
 	$SQLQUERY="SELECT * FROM reservation where UID='".$id."' AND type=9";
 	$queryResStr=mysql_query($SQLQUERY,$connstr);
 	$row=mysql_fetch_array($queryResStr);
-	if($row['neupID']=="") $row['neupID']="NOT Registered";
-	$returnStr="您的预约已经完成 ～ 信息如下：\n先锋ID:".$row['neupID']."\n维修产品品牌:".$row['brand']."\n服务类型:".$infostr[(int)$type]."\n预约日期:".$row['date']."\n维修码:(每个用户的每一次维修码都不同，供维护信息，提供凭证使用，请保存)\n".$row['reserhash']."\n请在7天内的周二到先锋网络中心(大活204)接受服务，如果临时有事不能到请在菜单中取消\n";
+	$returnStr="您的预约已经完成 ～ 信息如下：\n先锋ID:".$row['neupID']."\n维修产品品牌:".$row['brand'].."\n服务类型:".$infostr[$row['type']]."\n预约日期:".$row['date']."\n维修码:(每个用户的每一次维修码都不同，供维护信息，提供凭证使用，请保存)\n".$row['reserhash']."\n请在7天内的周二到先锋网络中心(大活204)接受服务，如果临时有事不能到请在菜单中取消\n";
 	$SQLQUERY="UPDATE reservation SET type=".$type." WHERE UID ='".$id."' AND type = 9"; 
-    $flag=mysql_query($SQLQUERY,$connstr);
-	echo mysql_error();
-    if($flag) return $returnStr; 
+    $err=mysql_query($SQLQUERY,$connstr);
+    echo mysql_error();
+    if(!$err) return 1; 
     return 0;
     
 }

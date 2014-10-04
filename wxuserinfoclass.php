@@ -14,7 +14,7 @@ class WechatUser{
 		$this->myname = $tmpObj->ToUserName;
 		$this->msgType = $tmpObj->MsgType;
 		$this->content = $tmpObj->Content;
-		$this->timeStamp = time(); 
+		$this->timeStamp = $tmpObj->CreateTime; 
 		$this->rawmsg=$xmlstr;
 	}
 	

@@ -9,7 +9,7 @@ class WechatResponse{
 		$sess_1=(int)$this->resSessObj->sessID[1];	
 		$sess_2=(int)$this->resSessObj->sessID[2];	
 		$sess_3=(int)$this->resSessObj->sessID[3];	
-		echo $sess_1.$sess_2.$sess_3;
+		//echo $sess_1.$sess_2.$sess_3;
 		if($sess_1==0)
 		{
 			//echo "DEBUG\n".$this->resUserObj->content;
@@ -52,7 +52,7 @@ class WechatResponse{
 				{
 					if($this->resUserObj->content=="9")
 					{
-						$this->responseRepairWarning();
+						$this->responseRepairWarning(1);
 					}
 					else
 					{
@@ -63,7 +63,15 @@ class WechatResponse{
 				{
 					//Update the latest message
 					//SHOW RESPONCE IN DATABASE
-					$this->responseRepair_3();
+					$con=$this->resUserObj->content;
+					if($con=="1" || $con=="2" || $con=="3" || $con=="4")
+					{
+						$this->responseRepair_3();
+					}
+					else
+					{
+						$this->responseRepairWarning(2);
+					}
 				}
 
 			}
@@ -111,39 +119,25 @@ class WechatResponse{
 	private function responseRepair_1()
 	{
 		$this->resSessObj->set_session(2,1);
-		$this->contObj->textMsg="请回复你的笔记本牌子";
-		$this->resSessObj->set_session(3,1);
+		$flag=DB_ifExist($this->resUserObj->username);
+		if(!$flag)
+		{
+			$this->contObj->textMsg="请回复你的笔记本品牌";
+			$this->resSessObj->set_session(3,1);
+		}
+		else
+		{
+			$this->contObj->textMsg="You have made a reservation in 7 days please finish it first";
+			$this->setBack();
+		}
 	}
 
 	private function responseRepair_2()
 	{
 		//Database Operation INSERT INTO reservation
 		//Process Store the Brand Type
-		//$flag=DB_ifExist($this->userObj->username);
-		//if($flag)
-		//{
-			$err=DB_write_brand($this->resUserObj->username,$this->resUserObj->content);	
-			//echo mysql_error();
-			if($err)
-			{
-				$this->contObj->textMsg="哎呀，数据库菌生病了呢 ，请稍候再试哦，如果您多次尝试后还是看到了这条消息 请把下面的错误信息发送到给开发者".mysql_error()."\n\n给您带来的不便深表歉意 您已返回主菜单";
-				$this->setBack();
-			}
-			else
-			{
-				$this->contObj->textMsg="请选择你要的服务编号:\n1.清灰\n2.装系统\n3.手机刷机\n4.数据恢复";
-				$this->resSessObj->set_session(3,2);
-			}
-	//	}
-	//	else
-	//	{
-	//		$this->contObj->textMsg="You have made a reservation in 7 days please finish it first";
-	//	}
-	}
-
-	private function responseRepair_3()
-	{
-		$err=DB_write_type($this->resUserObj->username,$this->resUserObj->content);	
+		$err=DB_write_brand($this->resUserObj,$this->resUserObj->content);	
+		//echo mysql_error();
 		if($err)
 		{
 			$this->contObj->textMsg="哎呀，数据库菌生病了呢 ，请稍候再试哦，如果您多次尝试后还是看到了这条消息 请把下面的错误信息发送到给开发者".mysql_error()."\n\n给您带来的不便深表歉意 您已返回主菜单";
@@ -151,14 +145,37 @@ class WechatResponse{
 		}
 		else
 		{
-			$this->contObj->textMsg="You have successfully reservationed SHOW INFO";
+			$this->contObj->textMsg="请选择你要的服务编号:\n1.清灰\n2.装系统\n3.手机刷机\n4.数据恢复";
+			$this->resSessObj->set_session(3,2);
+		}
+	}
+
+	private function responseRepair_3()
+	{
+		$result=DB_write_type($this->resUserObj->username,$this->resUserObj->content);	
+		if(!$result)
+		{
+			$this->contObj->textMsg="哎呀，数据库菌生病了呢 ，请稍候再试哦，如果您多次尝试后还是看到了这条消息 请把下面的错误信息发送到给开发者".mysql_error()."\n\n给您带来的不便深表歉意 您已返回主菜单";
+			$this->setBack();
+		}
+		else
+		{
+			$this->contObj->textMsg=$result;
 			$this->setBack();
 		}
 	}
 
-	private function responseRepairWarning()
+	private function responseRepairWarning($warnid)
 	{
-		$this->contObj->content="9是系统保留字符，更何况亲你的电脑牌子不可能是 \"9\"吧～ \n请重新回复您的牌子\n  _(:з」∠)_ ";
+		switch($warnid)
+		{
+		case "1":
+			$this->contObj->textMsg="9是系统保留字符，更何况亲你的电脑品牌不可能是 \"9\"吧～ \n请重新回复您的品牌\n  _(:з」∠)_ ";
+			break;
+		case "2":
+			$this->contObj->textMsg="";
+			break;
+		}
 	}
 
 	private function setBack()
