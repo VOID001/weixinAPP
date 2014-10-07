@@ -22,8 +22,8 @@ class WechatResponse{
 				$this->responseRepair_0();
 				break;
 			case "3":
-				//$this->responseHots();
-				$this->responseNotYet();
+				$this->responseHots();
+				//$this->responseNotYet();
 				break;
 			default:
 				$this->responseWelcome();
@@ -195,7 +195,10 @@ class WechatResponse{
 
 	private function responseHots()
 	{
+		require_once('hots.php');
+		$resstr=getHot();
 		$this->contObj->textMsg="BBS HOTS\n\n".$resstr;
+		$this->setBack();
 	}
 
 }
