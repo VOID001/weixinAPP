@@ -16,11 +16,14 @@ class WechatResponse{
 			switch($this->resUserObj->content)
 			{
 			case "1":
+				$this->responseNotYet();
 				break;
 			case "2":
 				$this->responseRepair_0();
 				break;
 			case "3":
+				//$this->responseHots();
+				$this->responseNotYet();
 				break;
 			default:
 				$this->responseWelcome();
@@ -99,9 +102,7 @@ class WechatResponse{
 		//$this->resUserObj=new WechatUser($wuserObj->rawmsg);
 		$this->resUserObj=$wuserObj;
 		$this->resSessObj=$wsessObj;
-		$this->resSessObj->get_session();
-		//$wuserObj->debug_printInfo();
-		//$this->resUserObj->debug_printInfo();
+		$this->resSessObj->get_session(); //$wuserObj->debug_printInfo(); //$this->resUserObj->debug_printInfo();
 	}
 
 	private function responseWelcome()
@@ -183,6 +184,18 @@ class WechatResponse{
 		$this->resSessObj->set_session(1,0);
 		$this->resSessObj->set_session(2,0);
 		$this->resSessObj->set_session(3,0);
+	}
+
+	private function responseNotYet()
+	{
+
+		$this->contObj->textMsg="功能正在开发中，敬请期待～\n";
+		$this->setBack();
+	}
+
+	private function responseHots()
+	{
+		$this->contObj->textMsg="BBS HOTS\n\n".$resstr;
 	}
 
 }
