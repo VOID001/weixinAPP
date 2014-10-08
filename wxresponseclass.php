@@ -1,3 +1,4 @@
+<?php error_reporting(E_ALL)?>
 <?php
 class WechatResponse{
     private $resSessObj;
@@ -16,7 +17,8 @@ class WechatResponse{
 			switch($this->resUserObj->content)
 			{
 			case "1":
-				$this->responseNotYet();
+				//$this->responseNotYet();
+				$this->responseLogin_0();
 				break;
 			case "2":
 				$this->responseRepair_0();
@@ -85,9 +87,39 @@ class WechatResponse{
 			{
 			}
 		}
-		else if($sess_1==1)
+		else if($sess_1==1)						//NEUP_Login_Weixin
 		{
+			if($sess_2==0)
+			{
+				switch($this->resUserObj->content)
+				{
+				case "1":
+					$this->responseLogin_1();		
+					break;
+				case "2":
+					$this->responseNotYet();
+					break;
+				case "3":
+					$this->responseNotYet();
+					break;
+				case "9":
+					$this->responseWelcome();
+					break;
+				default:
+				}
+			}
+			else if($sess_2==1)
+			{
+				$this->responseLogin_2();
+			}		
+			else if($sess_2==2)
+			{
 
+			}
+			else if($sess_2==3)
+			{
+
+			}
 		}
 		else if($sess_1==3)
 		{
@@ -174,7 +206,7 @@ class WechatResponse{
 			$this->contObj->textMsg="9是系统保留字符，更何况亲你的电脑品牌不可能是 \"9\"吧～ \n请重新回复您的品牌\n  _(:з」∠)_ ";
 			break;
 		case "2":
-			$this->contObj->textMsg="";
+			$this->contObj->textMsg="请输入合法的编号哦～";
 			break;
 		}
 	}
@@ -201,4 +233,46 @@ class WechatResponse{
 		$this->setBack();
 	}
 
-}
+	private function responseLogin_0()
+	{
+		$this->contObj->textMsg="微信提供了快速访问先锋论坛的接口，请选择您要的服务\n1.授权登录\n2.注销登录\n3..微信注册\n4.发帖子\n\n请回复您要的操作的编号，回复9是返回主菜单哦～～";
+		$this->resSessObj->set_session(1,1);
+	}
+
+	private function responseLogin_1()
+	{
+		$this->contObj->textMsg="请输入您的用户名和密码，中间用空格分开 系统将不会记录您的密码，只会保留用户名作为登录凭证";
+		$this->resSessObj->set_session(2,1);
+	}
+
+	private function responseLogin_2()
+	{
+        list($tmpname,$tmppasswd)=sscanf($this->resUserObj->content,"%s %s");
+		if(bbs_logger($tmpname,$tmppasswd))
+		{
+			$this->contObj->textMsg="欢迎您!".$tmpname."您已成功登录\n";
+			//DataBase Operation
+		}
+		else
+		{
+			$this->contObj->textMsg="用户不存在或者密码错误或输入不合法，请检查您的输入是否正确无误\n";
+		}
+		$this->setBack();
+	}
+
+}	
+/*function debugLogin($str)
+{
+	include_once('wxbbsapi.php');
+	list($tmpname,$tmppasswd)=sscanf($str,"%s %s");
+	if(bbs_logger($tmpname,$tmppasswd))
+	{
+		echo "欢迎您!".$tmpname."您已成功登录\n";
+		//DataBase Operation
+	}
+	else
+	{
+		echo "用户不存在或者密码错误或输入不合法，请检查您的输入是否正确无误\n";
+	}
+}*/
+
