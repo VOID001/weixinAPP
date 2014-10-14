@@ -18,16 +18,14 @@ function bbs_logger($usrname,$passwd)
 	curl_setopt($ch, CURLOPT_URL,$login_url);
 	$res=curl_exec($ch);
 	curl_close($ch);
-	echo "UNAME=$usrname\nUPWD=$passwd\n";
+	//echo "UNAME=$usrname\nUPWD=$passwd\n";
 	echo $res;
-	if(!strstr($res,"location: home.php?mod=space&do=home"))
+	if(!strstr($res,"301 Moved Permanently"))
 	{
-		echo "FALSE";
 		return false;
 	}
 	else
 	{
-		echo "TRUE";
 		return true;
 	}
 }

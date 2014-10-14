@@ -44,7 +44,7 @@ check_login(); ?>
 		echo '<input type="hidden" name="postchange" value= 1>';
 		while($row=mysql_fetch_array($queryResStr))
 		{
-			echo "<tr><td width=200><b>".$row['UID']."</b></td><td>".$row['brand']."</td><td>";
+			echo "<tr><td width=200><b>".$row['neupID']."</b></td><td>".$row['brand']."</td><td>";
 			switch($row['type'])
 			{
 			case 0:
@@ -56,7 +56,7 @@ check_login(); ?>
 			case 2:
 				echo "<font color=purple><b>手机刷机</b></font>";
 				break;
-			case 2:
+			case 3:
 				echo "<font color=yellow><b>DataRecovery</b></font>";
 				break;
 			}

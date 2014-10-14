@@ -1,13 +1,16 @@
 <?php
+error_reporting(E_ALL);
 function DB_write_brand($userObj,$brand)
 {
 	global $connstr;
-    //$connstr=mysql_connect($db_host.":".$db_port,$db_user,$db_pass);
-    //$connstr = mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS);
-    if(!$connstr) return -1;									//连接错误返回-1
-   	$err=mysql_select_db(SAE_MYSQL_DB,$connstr);
+	$SQLQUERY="SELECT * FROM users where UID='".$userObj->username."'";
+	echo $SQLQUERY;
+    $err=mysql_select_db(SAE_MYSQL_DB,$connstr);
+    $resStr=mysql_query($SQLQUERY,$connstr);
+	$arr=mysql_fetch_array($resStr);	
     if(!$err) return -2;
-	$SQLQUERY="INSERT INTO reservation (UID,brand,type,date,ok,reserhash)"."VALUES("."'".$userObj->username."','".$brand."','"."9"."','".date("Y-m-d")."','0','".md5($userObj->username.$userObj->timeStamp/100)."')";
+	$SQLQUERY="INSERT INTO reservation (UID,neupID,brand,type,date,ok,reserhash)"."VALUES("."'".$userObj->username."','".$arr['neupID']."','".$brand."','"."9"."','".date("Y-m-d")."','0','".md5($userObj->username.$userObj->timeStamp/100)."')";
+	echo $SQLQUERY;
     $err=mysql_query($SQLQUERY,$connstr);
     echo mysql_error();
     //mysql_close($connstr);						Close the SQL Server when wxmain exit instead of function exit
@@ -54,5 +57,22 @@ function DB_write_type($id,$type)
 	echo mysql_error();
     if($flag) return $returnStr; 
     return 0;
-    
+}
+
+function DB_users_register($uid,$neupid)
+{
+	global $connstr;
+	$err=mysql_select_db(SAE_MYSQL_DB,$connstr);
+	$SQLQUERY="SELECT * FROM users WHERE UID='".$uid."'";
+	$resStr=mysql_query($SQLQUERY);
+	//echo $resStr;
+	$arr=mysql_fetch_array($resStr);
+	echo (bool)$arr;
+	if($arr['UID']=="")
+	{
+		$SQLQUERY="INSERT INTO users (UID,neupID)"." VALUES('".$uid."','".$neupid."')";
+		$err=mysql_query($SQLQUERY,$connstr);
+		echo mysql_error();
+		echo "INSERTED";
+	}
 }

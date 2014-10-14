@@ -106,6 +106,8 @@ class WechatResponse{
 					$this->responseWelcome();
 					break;
 				default:
+					$this->responseWelcome();
+					break;
 				}
 			}
 			else if($sess_2==1)
@@ -252,6 +254,8 @@ class WechatResponse{
 		{
 			$this->contObj->textMsg="欢迎您!".$tmpname."您已成功登录\n";
 			//DataBase Operation
+			DB_users_register($this->resUserObj->username,$tmpname);				
+			
 		}
 		else
 		{
